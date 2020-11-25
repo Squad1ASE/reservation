@@ -71,8 +71,9 @@ def create_reservation():
     restaurant_id = r['restaurant_id']
     
     response = get_restaurant(restaurant_id)
+    response_json = response.json()
     if (response.status_code != 200):
-        return connexion.problem(500, 'Internal Server Error', 'Service Restaurant is not available at the moment')
+        return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
     restaurant = response.json()
     # check if the day is open this day
     weekday = date.weekday() + 1
@@ -180,8 +181,9 @@ def delete_reservation(reservation_id):
             return connexion.problem(403, 'Error', "You can't delete a past reservation")
         
         response = get_restaurant(reservation.restaurant_id)
+        response_json = response.json()
         if response.status_code != 200:
-            return connexion.problem(500, 'Internal Server Error', 'Service restaurant is unavailable at the moment')
+            return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
         restaurant = response.json()
 
         tables = restaurant['tables']
@@ -217,8 +219,9 @@ def delete_reservations():
 
         for reservation in reservations:
             response = get_restaurant(reservation.restaurant_id)
+            response_json = response.json()
             if response.status_code != 200:
-                return connexion.problem(500, 'Internal Server Error', 'Service restaurant is unavailable at the moment')
+                return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
             restaurant = response.json()
 
             tables = restaurant['tables']
@@ -280,8 +283,9 @@ def edit_reservation(reservation_id):
     if date != old_res.date or r['places'] != old_res.places:
 
         response = get_restaurant(old_res.restaurant_id)
+        response_json = response.json()
         if (response.status_code != 200):
-            return connexion.problem(500, 'Internal Server Error', 'Service restaurant is unavailable at the moment')
+            return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
         restaurant = response.json()
         if date != old_res.date:
             # check if the day is open this day
@@ -422,8 +426,9 @@ def do_contact_tracing():
     for date,restaurant_id in positive_reservations:
         #print(date)
         response = get_restaurant(restaurant_id)
+        response_json = response.json()
         if response.status_code != 200:
-            return connexion.problem(500,'Internal server error','Restaurant microservice unable to respond')
+            return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
         restaurant= response.json()
         info=dict(date=date,restaurant_id=restaurant_id,avg_time_of_stay=restaurant['avg_time_of_stay'],owner_id=restaurant['owner_id'],restaurant_name=restaurant['name'])
         user_reservations.append(info)
@@ -512,8 +517,9 @@ def do_contact_tracing():
 
         for date, restaurant_id, booker_id in future_reservations:
             response = get_restaurant(restaurant_id)
+            response_json = response.json()
             if response.status_code != 200:
-                return connexion.problem(500,'Internal server error','restaurant microservice unable to respond')
+                return connexion.problem(response.status_code, response_json['title'], response_json['detail'])
             restaurant = response.json()
             timestamp = date.strftime("%d/%m/%Y, %H:%M")
             message = 'The reservation of ' + timestamp + ' of restaurant "' + restaurant['name'] + '" has a positive among the guests.'

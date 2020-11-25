@@ -4,10 +4,12 @@ import os
 
 from requests import Response
 
-API_GATEWAY_SERVICE = 'http://127.0.0.1:5000/'
-USER_SERVICE = 'http://127.0.0.1:5060/'
-RESTAURANT_SERVICE = 'http://127.0.0.1:5070/'
-#API_GATEWAY_SERVICE = os.environ['API_GATEWAY_SERVICE']
+#API_GATEWAY_SERVICE = 'http://127.0.0.1:5000/'
+#USER_SERVICE = 'http://127.0.0.1:5060/'
+#RESTAURANT_SERVICE = 'http://127.0.0.1:5070/'
+API_GATEWAY_SERVICE = os.environ['API_GATEWAY_SERVICE']
+API_GATEWAY_SERVICE = os.environ['USER_SERVICE']
+API_GATEWAY_SERVICE = os.environ['RESTAURANT_SERVICE']
 
 # get a restaurant example
 def get_restaurant(restaurant_id):

@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 import connexion, logging
 import database
@@ -35,10 +36,10 @@ application = app.app
 def make_celery(app):
     celery = Celery(
         app.import_name,
-        # broker=os.environ['CELERY_BROKER_URL'],
-        # backend=os.environ['CELERY_BACKEND_URL']
-        backend='redis://localhost:6379',
-        broker='redis://localhost:6379'
+        broker=os.environ['CELERY_RESERVATION_BROKER_URL'],
+        backend=os.environ['CELERY_RESERVATION_BACKEND_URL']
+        # backend='redis://localhost:6379',
+        # broker='redis://localhost:6379'
     )
     celery.conf.update(app.config)
     celery.conf.beat_schedule = {'hello': {
