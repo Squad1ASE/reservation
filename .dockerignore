@@ -59,4 +59,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
+reservation.egg-info
+__pycache__
